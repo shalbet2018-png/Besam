@@ -1,7 +1,7 @@
 // The fixed 3D background: a working Besam yard under a ringed murram planet.
 // The camera flies through the scene as the visitor scrolls.
 import {
-  THREE, PALETTE, makeExcavator, makeTruck, makeLoader, makePile, makeRingedPlanet, makeTerrain,
+  THREE, PALETTE, makeExcavator, makeTruck, makeLoader, makeTree, makePile, makeRingedPlanet, makeTerrain,
 } from './models.js';
 
 export function startScene(canvas) {
@@ -24,7 +24,7 @@ export function startScene(canvas) {
   renderer.toneMappingExposure = 1.05;
 
   const scene = new THREE.Scene();
-  scene.fog = new THREE.FogExp2(0x1a0710, 0.012);
+  scene.fog = new THREE.FogExp2(0x1d0814, 0.012);
 
   const camera = new THREE.PerspectiveCamera(small ? 62 : 50, window.innerWidth / window.innerHeight, 0.1, 600);
 
@@ -107,6 +107,16 @@ export function startScene(canvas) {
     p.position.set(x, 0, z);
     scene.add(p);
   });
+
+  // Acacia trees in the brand green, ringing the yard.
+  for (let i = 0; i < (small ? 10 : 18); i++) {
+    const a = (i / (small ? 10 : 18)) * Math.PI * 2 + Math.sin(i * 7.3) * 0.2;
+    const r = 21 + ((i * 37) % 13);
+    const tree = makeTree(0.8 + ((i * 13) % 7) / 10);
+    tree.position.set(Math.cos(a) * r, 0, Math.sin(a) * r);
+    tree.rotation.y = i;
+    scene.add(tree);
+  }
 
   const trucks = [0, 1, 2].map((i) => {
     const t = makeTruck({ loaded: i !== 1, color: i === 2 ? PALETTE.maroon : PALETTE.crimson });

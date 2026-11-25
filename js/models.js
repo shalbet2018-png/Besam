@@ -3,18 +3,19 @@
 import * as THREE from './vendor/three.module.min.js';
 
 export const PALETTE = {
-  crimson: 0xc11f5c,
-  maroon: 0x5a122e,
-  ink: 0x14070d,
+  crimson: 0x821d11,
+  green: 0x0f4c25,
+  maroon: 0x2a0a0b,
+  ink: 0x1d0814,
   steel: 0x2b2b31,
   steelLight: 0x6d6d78,
   glass: 0x9fd3e6,
-  murram: 0xb5562a,
-  murramLight: 0xd27a43,
-  sand: 0xdcb47c,
+  murram: 0x9a3d1c,
+  murramLight: 0xc08a5a,
+  sand: 0xad7d4e,
   ballast: 0x8a8a92,
-  ground: 0x3a1a14,
-  amber: 0xffb347,
+  ground: 0x2a0a0b,
+  amber: 0xd9a36a,
 };
 
 const mat = (color, opts = {}) =>
@@ -382,7 +383,7 @@ export function makeRingedPlanet({ radius = 9, rocks = 1400 } = {}) {
   const e = new THREE.Euler();
   const s = new THREE.Vector3();
   const p = new THREE.Vector3();
-  const tones = [PALETTE.ballast, PALETTE.murram, PALETTE.sand, PALETTE.crimson, PALETTE.murramLight];
+  const tones = [PALETTE.ballast, PALETTE.murram, PALETTE.sand, PALETTE.crimson, PALETTE.green, PALETTE.murramLight];
   const col = new THREE.Color();
   for (let i = 0; i < rocks; i++) {
     const a = Math.random() * Math.PI * 2;
@@ -410,7 +411,7 @@ export function makeTerrain({ size = 140, seg = 70 } = {}) {
   const pos = geo.attributes.position;
   const colors = [];
   const a = new THREE.Color(PALETTE.ground);
-  const b = new THREE.Color(0x5b2a1a);
+  const b = new THREE.Color(0x4a1a10);
   const c = new THREE.Color(PALETTE.murram);
   for (let i = 0; i < pos.count; i++) {
     const x = pos.getX(i);
@@ -429,6 +430,21 @@ export function makeTerrain({ size = 140, seg = 70 } = {}) {
   const m = new THREE.Mesh(geo, new THREE.MeshStandardMaterial({ vertexColors: true, flatShading: true, roughness: 1 }));
   m.receiveShadow = true;
   return m;
+}
+
+/* ---------------- Acacia-style tree ---------------- */
+export function makeTree(scale = 1) {
+  const g = new THREE.Group();
+  const trunk = cyl(0.12, 0.2, 2.2, 6, mat(0x2a0a0b, { roughness: 1 }));
+  trunk.position.y = 1.1;
+  g.add(trunk);
+  const crown = new THREE.Mesh(new THREE.IcosahedronGeometry(1.4, 0), mat(PALETTE.green, { roughness: 0.9 }));
+  crown.scale.set(1.5, 0.45, 1.5);
+  crown.position.y = 2.4;
+  crown.castShadow = true;
+  g.add(crown);
+  g.scale.setScalar(scale);
+  return g;
 }
 
 export { THREE };

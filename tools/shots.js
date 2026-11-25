@@ -1,7 +1,7 @@
 // Renders one still "photo" per ?shot= value. Used by tools/render-images.mjs
 // to make the placeholder images in /images until Besam's real photos arrive.
 import {
-  THREE, PALETTE, makeExcavator, makeTruck, makeLoader, makePile, makeGlassBuilding, makeRingedPlanet, makeTerrain,
+  THREE, PALETTE, makeExcavator, makeTruck, makeLoader, makePile, makeGlassBuilding, makeRingedPlanet, makeTerrain, makeTree,
 } from '../js/models.js';
 
 const shot = new URLSearchParams(location.search).get('shot') || 'excavator';
@@ -42,12 +42,18 @@ function lights({ sunColor = 0xffc48a, sunPos = [-20, 25, 15], intensity = 3 } =
   scene.add(rim);
 }
 
-const ground = () => { const t = makeTerrain({ seg: 90 }); scene.add(t); return t; };
+const ground = () => {
+  const t = makeTerrain({ seg: 90 }); scene.add(t);
+  [[-14, -18, 1.2], [12, -22, 1], [22, -10, 1.3], [-24, -6, 0.9], [4, -30, 1.4], [-8, -34, 1.1]].forEach(([x, z, k], i) => {
+    const tr = makeTree(k); tr.position.set(x, 0, z); tr.rotation.y = i; scene.add(tr);
+  });
+  return t;
+};
 
 const shots = {
   excavator() {
-    sky(0x2a0c1f, 0xf08a4b);
-    scene.fog = new THREE.Fog(0xd77a4b, 25, 110);
+    sky(0x1d0814, 0xad7d4e);
+    scene.fog = new THREE.Fog(0x8a5a3c, 25, 110);
     lights({ sunPos: [-30, 14, 10] });
     ground();
     const ex = makeExcavator();
@@ -59,8 +65,8 @@ const shots = {
     camera.position.set(9, 3.2, 11); camera.lookAt(0, 1.8, 1.5);
   },
   loader() {
-    sky(0x1d0a22, 0xe56b45);
-    scene.fog = new THREE.Fog(0xc96a49, 20, 100);
+    sky(0x1d0814, 0xad7d4e);
+    scene.fog = new THREE.Fog(0x8a5a3c, 20, 100);
     lights({ sunPos: [25, 16, 12] });
     ground();
     const l = makeLoader(); l.rotation.y = -0.6; l.userData.arms.rotation.x = 0.32; scene.add(l);
@@ -68,8 +74,8 @@ const shots = {
     camera.position.set(7, 3, 9); camera.lookAt(0, 1.5, 1);
   },
   truck() {
-    sky(0x170818, 0xff9a52);
-    scene.fog = new THREE.Fog(0xe0844f, 30, 140);
+    sky(0x1d0814, 0xad7d4e);
+    scene.fog = new THREE.Fog(0x8a5a3c, 30, 140);
     lights({ sunPos: [-40, 10, -10], intensity: 3.4 });
     ground();
     const road = new THREE.Mesh(new THREE.PlaneGeometry(6, 300), new THREE.MeshStandardMaterial({ color: 0x1c1b1e, roughness: 0.9 }));
@@ -85,8 +91,8 @@ const shots = {
     camera.position.set(6, 2.2, 10); camera.lookAt(-1, 1.4, -2);
   },
   materials() {
-    sky(0x231022, 0xf2a35e);
-    scene.fog = new THREE.Fog(0xd98a58, 25, 110);
+    sky(0x1d0814, 0xad7d4e);
+    scene.fog = new THREE.Fog(0x8a5a3c, 25, 110);
     lights({ sunPos: [-18, 20, 20] });
     ground();
     [[PALETTE.murram, -6, 0], [PALETTE.sand, 0, -1], [PALETTE.ballast, 6, 0], [PALETTE.murramLight, 12, -2]].forEach(([c, x, z], i) => {
@@ -96,8 +102,8 @@ const shots = {
     camera.position.set(3, 4, 15); camera.lookAt(1, 1, 0);
   },
   earthworks() {
-    sky(0x16091c, 0xd66a4a);
-    scene.fog = new THREE.Fog(0xb85d45, 30, 130);
+    sky(0x1d0814, 0xad7d4e);
+    scene.fog = new THREE.Fog(0x8a5a3c, 30, 130);
     lights({ sunPos: [-10, 30, 25] });
     ground();
     const ex = makeExcavator(); ex.position.set(-3, 0, 0); ex.rotation.y = 1.2; ex.userData.animate(1.2); scene.add(ex);
@@ -108,8 +114,8 @@ const shots = {
     camera.position.set(10, 6.5, 12); camera.lookAt(0.5, 0.8, 0);
   },
   glass() {
-    sky(0x0e1630, 0xf29a6a);
-    scene.fog = new THREE.Fog(0xd88f73, 30, 150);
+    sky(0x1d0814, 0xad7d4e);
+    scene.fog = new THREE.Fog(0x8a5a3c, 30, 150);
     lights({ sunPos: [-25, 18, 22], sunColor: 0xffd2a8 });
     const floor = new THREE.Mesh(new THREE.PlaneGeometry(200, 200), new THREE.MeshStandardMaterial({ color: 0x2b2228, roughness: 0.9 }));
     floor.rotation.x = -Math.PI / 2; floor.receiveShadow = true; scene.add(floor);
@@ -118,7 +124,7 @@ const shots = {
     camera.position.set(9, 3, 15); camera.lookAt(-1, 3.5, 0);
   },
   planet() {
-    sky(0x05030a, 0x2a0b1c);
+    sky(0x0c0308, 0x2a0a0b);
     const st = new THREE.BufferGeometry(); const a = new Float32Array(3000);
     for (let i = 0; i < 1000; i++) { const v = new THREE.Vector3().randomDirection().multiplyScalar(300); a.set([v.x, v.y, v.z], i * 3); }
     st.setAttribute('position', new THREE.BufferAttribute(a, 3));
