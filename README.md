@@ -56,7 +56,7 @@ Settings → Pages → Source: "Deploy from a branch" → Branch `main`, folder 
 
 ```
 index.html          the whole page
-css/style.css       styles (brand crimson #C11F5C, maroon #5A122E)
+css/style.css       styles (palette: plum #1d0814, rust #821d11, sand #ad7d4e, green #0f4c25, maroon-brown #2a0a0b)
 js/main.js          nav, scroll effects, WhatsApp links, quote form
 js/scene.js         3D background scene
 js/models.js        low-poly excavator, loader, tipper, piles, glass building, ringed planet
